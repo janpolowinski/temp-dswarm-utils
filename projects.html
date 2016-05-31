@@ -1,0 +1,11 @@
+<form>
+  <input type="text" ng-model="search">
+  <p ng-show="search">Filtered by: {{search}}</p>
+</form>
+
+<table class="table" ng-controller="ProjectsCtrl">
+<tr ng-repeat="project in projects | filter:search">
+  <td>{{project.uuid}}</td>
+  <td>{{project.name}}</td>
+</tr>
+</table>
