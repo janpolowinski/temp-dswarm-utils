@@ -3,8 +3,9 @@
 //var baseUrlBackend = 'http://194.95.142.135/dmp/';
 //var baseUrlBackend = 'http://sdvdmpdev.slub-dresden.de/dmp/';
 //var baseUrlBackend = 'http://sdvdswarmpro.slub-dresden.de/dmp/';
-var baseUrlBackend = 'http://sdvdmppro.slub-dresden.de/dmp/';
+//var baseUrlBackend = 'http://sdvdmppro.slub-dresden.de/dmp/';
 // ?format=medium ?format=medium ?format=full (default)
+var baseUrlBackend = 'http://dswarmtest01.slub-dresden.de/dmp/';
 
 
 angular.module('dswarmBackstageApp', ['ngAnimate', 'ngRoute'])
@@ -19,18 +20,63 @@ angular.module('dswarmBackstageApp', ['ngAnimate', 'ngRoute'])
   .factory('MappingTable', function() {
     var project = null;
     return {
+    	
       getMappings: function() {
     	if(project!=null)
     		return project.mappings;
     	else
     		return [];
       },
+      
       setProject: function(currentProject) {
         project = currentProject;
       },
+      
       getProject: function() {
           return project;
-        }
+      },
+      
+      getFilterExpression: function(imapi) {
+    	  var expressionString;
+    	  var expression = null;
+    	  if(imapi.filter==null) 
+    		  return null;
+    	  else if (imapi.filter.expression!=null) {
+    		  expressionString = imapi.filter.expression;
+//    		  expression = {"type" : "test", "expression" : "expression"};
+    		  expression = jQuery.parseJSON(expressionString);
+//    		  alert(expression.type);
+    	  }
+    	  return expression;
+      },
+
+      getTagValueFromFilter: function(expressionString) {
+    		if (null!=expressionString) {
+    		    var re = /^.*#tag":"([^"]*)"\}.*/; 
+    		    var matches = expressionString.match(re);
+    	        if (matches == null) return "";
+    	        else return matches[1];
+    		} else return "";
+       },
+    	
+       getCodeValueFromFilter: function (expressionString) {
+    		if (null!=expressionString) {
+    		    var re = /^.*#code":"([^"]*)"\}.*/; 
+    		    var matches = expressionString.match(re);
+    	        if (matches == null) return "";
+    	        else return matches[1];
+    		} else return "";
+    	},
+
+    	getIDValueFromFilter: function (expressionString) {
+    		if (null!=expressionString) {
+    		    var re = /^.*#id":"([^"]*)"\}.*/; 
+    		    var matches = expressionString.match(re);
+    	        if (matches != null) return " !!!!!!!!!!!!! ID was used somewhere in Filter! Intentionally? !!!!!!!!!!!!!!!!";
+    	        else return "";
+    		} else return "";
+    	}
+
     };
   })
   .controller('DatamodelsCtrl', function($scope, $http){

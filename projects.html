@@ -24,8 +24,20 @@
 <div ng-show="mappingTable.getMappings().length">
 	<table class="table">
 	  <tr ng-repeat="mapping in mappingTable.getMappings()" class="item">
-	    <td>{{mapping.name}}</td>
 	    <td>{{mapping.uuid}}</td>
+	    <td>{{mapping.name}}</td>
+	    <td>
+			<div ng-repeat="imapi in mapping.input_attribute_paths" >
+				<!--<span>{{imapi.filter.expression}}</span>--> <!-- this is still a string -- escaped JSON! -->
+				<span>expressions: {{mappingTable.getFilterExpression(imapi)}}</span>
+				
+				<!-- Does not work:-->
+				<!--<div ng-repeat="expression in mappingTable.getFilterExpression(imapi)" >
+					<span>expression: {{expression}}</span>
+				</div>-->
+
+			</div>
+	    </td>
 	  </tr>
 	</table>
 	<div>{{mappingTable.getMappings().length}} Mappings</div>
