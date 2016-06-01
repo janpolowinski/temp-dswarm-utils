@@ -20,7 +20,10 @@ angular.module('dswarmBackstageApp', ['ngAnimate', 'ngRoute'])
     var project = null;
     return {
       getMappings: function() {
-        return project.mappings;
+    	if(project!=null)
+    		return project.mappings;
+    	else
+    		return [];
       },
       setProject: function(currentProject) {
         project = currentProject;
