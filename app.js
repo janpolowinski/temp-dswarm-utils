@@ -16,15 +16,33 @@ angular.module('dswarmBackstageApp', ['ngAnimate', 'ngRoute'])
       .when('/about', { template: 'Utilities not yet part of the D:SWARM Backoffice (Frontend)' })
       .otherwise({ redirectTo: '/'});
   })
+  .factory('MappingTable', function() {
+    var project = null;
+    return {
+      getMappings: function() {
+        return project.mappings;
+      },
+      setProject: function(currentProject) {
+        project = currentProject;
+      },
+      getProject: function() {
+          return project;
+        }
+    };
+  })
   .controller('DatamodelsCtrl', function($scope, $http){
     $http.get(baseUrlBackend + 'datamodels?format=short').then(function(response) {
       $scope.datamodels = response.data;
     });
   })
-  .controller('ProjectsCtrl', function($scope, $http){
-    $http.get(baseUrlBackend + 'projects?format=short').then(function(response) {
+  .controller('ProjectsCtrl', function($scope, $http, MappingTable){
+    $http.get(baseUrlBackend + 'projects?format=medium').then(function(response) {
       $scope.projects = response.data;
+      $scope.mappingTable = MappingTable;
     });
   })
+  .controller('MappingTableCtrl', function($scope, MappingTable){
+    $scope.mappingTable = MappingTable;
+  });
   
   ;

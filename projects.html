@@ -4,8 +4,30 @@
 </form>
 
 <table class="table" ng-controller="ProjectsCtrl">
+<tr>
+	<th>UUID</th>
+	<th>Name</th>
+	<th>Description</th>
+	<th></th>
+</tr>
 <tr ng-repeat="project in projects | filter:search">
   <td>{{project.uuid}}</td>
   <td>{{project.name}}</td>
+  <td>{{project.description}}</td>
+  <td><a href class="btn btn-default btn-sm" ng-click="mappingTable.setProject(project);">Details</a></td>
 </tr>
 </table>
+
+
+<div ng-controller="MappingTableCtrl">
+<div ng-hide="mappingTable.getMappings().length" class="alert alert-info">Select a project</div>
+<div ng-show="mappingTable.getMappings().length">
+	<table class="table">
+	  <tr ng-repeat="mapping in mappingTable.getMappings()" class="item">
+	    <td>{{mapping.name}}</td>
+	    <td>{{mapping.uuid}}</td>
+	  </tr>
+	</table>
+	<div>{{mappingTable.getMappings().length}} Mappings</div>
+</div>
+</div>
