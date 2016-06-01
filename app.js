@@ -1,7 +1,9 @@
 'use strict';
 
 //var baseUrlBackend = 'http://194.95.142.135/dmp/';
-var baseUrlBackend = 'http://sdvdmpdev.slub-dresden.de/dmp/';
+//var baseUrlBackend = 'http://sdvdmpdev.slub-dresden.de/dmp/';
+//var baseUrlBackend = 'http://sdvdswarmpro.slub-dresden.de/dmp/';
+var baseUrlBackend = 'http://sdvdmppro.slub-dresden.de/dmp/';
 // ?format=medium ?format=medium ?format=full (default)
 
 
