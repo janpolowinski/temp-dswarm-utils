@@ -1,11 +1,35 @@
 'use strict';
 
-//var baseUrlBackend = 'http://194.95.142.135/dmp/';
+var baseUrlBackend = 'http://194.95.142.135/dmp/';
 //var baseUrlBackend = 'http://sdvdmpdev.slub-dresden.de/dmp/';
 //var baseUrlBackend = 'http://sdvdswarmpro.slub-dresden.de/dmp/';
 //var baseUrlBackend = 'http://sdvdmppro.slub-dresden.de/dmp/';
 // ?format=medium ?format=medium ?format=full (default)
-var baseUrlBackend = 'http://dswarmtest01.slub-dresden.de/dmp/';
+//var baseUrlBackend = 'http://dswarmtest01.slub-dresden.de/dmp/';
+
+function parseFilterExpressions(projects) {
+	
+	for (let project of projects) { // 'for i of var' iterates the values, for .. in .. iterates the keys instead (ECMA 2015) https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Statements/for...of#Browser_compatibility 
+//	   console.log(project); 
+	   for (let mapping of project.mappings) {
+//		   console.log(mapping);
+		   for (let iap of mapping.input_attribute_paths) {
+//			   console.log(iap);
+			   if (iap.filter!=null && iap.filter.expression!=null) {
+//				   console.log(iap.filter.expression);
+				   var parsedFilterExpression = jQuery.parseJSON(iap.filter.expression);
+//				   console.log(parsedFilterExpression);
+				   iap.filter.expression=parsedFilterExpression;
+//				   console.log(iap.filter.expression);
+			   }
+		   }
+	   }
+		   
+		}
+	return projects;
+}
+
+
 
 
 angular.module('dswarmBackstageApp', ['ngAnimate', 'ngRoute'])
@@ -39,9 +63,7 @@ angular.module('dswarmBackstageApp', ['ngAnimate', 'ngRoute'])
       getFilterExpression: function(imapi) {
     	  var expressionString;
     	  var expression = null;
-    	  if(imapi.filter==null) 
-    		  return null;
-    	  else if (imapi.filter.expression!=null) {
+    	  if (imapi.filter!=null && imapi.filter.expression!=null) {
     		  expressionString = imapi.filter.expression;
 //    		  expression = {"type" : "test", "expression" : "expression"};
     		  expression = jQuery.parseJSON(expressionString);
@@ -86,7 +108,7 @@ angular.module('dswarmBackstageApp', ['ngAnimate', 'ngRoute'])
   })
   .controller('ProjectsCtrl', function($scope, $http, MappingTable){
     $http.get(baseUrlBackend + 'projects?format=medium').then(function(response) {
-      $scope.projects = response.data;
+      $scope.projects = parseFilterExpressions(response.data);
       $scope.mappingTable = MappingTable;
     });
   })
